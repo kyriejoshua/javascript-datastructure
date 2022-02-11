@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "outDir": "./lib/",
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es6",
+    "jsx": "react",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "lib": ["es2019", "dom", "es2015", "es2020.string"],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
+}

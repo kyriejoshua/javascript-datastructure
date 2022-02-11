@@ -1,0 +1,35 @@
+{
+  "name": "javascript-datastructure",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "javascript",
+    "datastructure"
+  ],
+  "author": "kyriejoshua",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^4.5.5"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.5.4",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "eslint": "^8.8.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.3",
+    "prettier": "2.5.1"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --ext .ts,.js --fix --max-warnings=0"
+    ],
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}
