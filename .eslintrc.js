@@ -4,13 +4,18 @@ module.exports = {
     commonjs: true,
     es6: true,
   },
-  parser: '@babel/eslint-parser',
-  extends: ['airbnb', 'prettier', 'eslint:recommended'],
+  parser: '@typescript-eslint/parser',
+  // parser: '@babel/eslint-parser',
+  extends: [
+    'prettier',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
   parserOptions: {
     ecmaVersion: 8,
     ecmaFeatures: {
       experimentalObjectRestSpread: true,
-      // 'jsx': true
     },
     // sourceType: 'module',
   },
@@ -24,5 +29,6 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
+    'no-plusplus': 0,
   },
 };
