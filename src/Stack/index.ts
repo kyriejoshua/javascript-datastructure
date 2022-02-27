@@ -1,7 +1,7 @@
 /**
  * @description: Stack
  * @param {len} number
- * @return {*}
+ * @return {Stack}
  */
 export default class Stack<T> {
   private stackList: T[];

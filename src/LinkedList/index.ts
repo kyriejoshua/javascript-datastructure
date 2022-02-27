@@ -9,7 +9,7 @@ export default class LinkedList<T> {
    * @param {T} element
    * @return {number}
    */
-  indexOf(element: T): number {
+  private indexOf(element: T): number {
     let current: TLinkedNode<T> = this.head;
     let i = 0;
     while (i < this.count) {
@@ -25,7 +25,7 @@ export default class LinkedList<T> {
    * @param {number} index
    * @return {boolean}
    */
-  isOverflow(index: number): boolean {
+  private isOverflow(index: number): boolean {
     return index < 0 || index > this.count;
   }
 
@@ -34,7 +34,7 @@ export default class LinkedList<T> {
    * @param {number} index
    * @return {TLinkedNode<T>}
    */
-  getLinkedNodeByIndex(index: number): TLinkedNode<T> {
+  public getLinkedNodeByIndex(index: number): TLinkedNode<T> {
     if (this.isOverflow(index)) return null;
 
     if (index === 0) {
@@ -58,16 +58,33 @@ export default class LinkedList<T> {
    * @param {number} index
    * @return {T|undefined}
    */
-  getElementByIndex(index: number): T | undefined {
+  public getElementByIndex(index: number): T | undefined {
     return this.getLinkedNodeByIndex(index)?.element;
   }
 
   /**
-   * @description: 链表末尾推入元素
+   * @description: 根据元素值找到结点
+   * @param {T} element
+   * @return {TLinkedNode<T>}
+   */
+  public find(element: T): TLinkedNode<T> {
+    let node: TLinkedNode<T> = this.head;
+    while (node !== null) {
+      if (node.element === element) {
+        break;
+      }
+      node = node.next;
+    }
+
+    return node;
+  }
+
+  /**
+   * @description: 在链表末尾推入元素
    * @param {T} element
    * @return {number}
    */
-  add(element: T): number {
+  public add(element: T): number {
     const node: TLinkedNode<T> = new LinkedNode(element);
 
     // 如果头结点为空则直接设置成头结点
@@ -78,9 +95,8 @@ export default class LinkedList<T> {
       const current: TLinkedNode<T> = this.getEnd();
       (current as LinkedNode<T>).next = node;
     }
-    this.count++;
 
-    return this.count;
+    return ++this.count;
   }
 
   /**
@@ -89,27 +105,19 @@ export default class LinkedList<T> {
    * @param {number} index
    * @return {boolean}
    */
-  insertByIndex(element: T, index: number): boolean {
+  public insertByIndex(element: T, index: number): boolean {
     // 如果溢出或者索引为负，直接添加不成功
     if (this.isOverflow(index)) return false;
 
     const node = new LinkedNode(element);
-    let i = 1;
 
     // 设置头结点或者正常插入
     if (index === 0) {
       this.head = node;
     } else {
-      let current: TLinkedNode<T> = (this.head as LinkedNode<T>).next;
-      let prev: TLinkedNode<T> = this.head;
-
-      while (i < index) {
-        prev = (prev as LinkedNode<T>).next;
-        current = (current as LinkedNode<T>).next;
-        i++;
-      }
-      node.next = current;
-      (prev as LinkedNode<T>).next = node;
+      const prevNode = this.getLinkedNodeByIndex(index - 1);
+      node.next = prevNode.next;
+      (prevNode as LinkedNode<T>).next = node;
     }
     this.count++;
 
@@ -121,7 +129,7 @@ export default class LinkedList<T> {
    * @param {number} index
    * @return {T|null}
    */
-  removeByIndex(index: number): T | null {
+  public removeByIndex(index: number): T | null {
     // 如果溢出或者索引为负，删除失败
     if (this.isOverflow(index)) return null;
     let current: TLinkedNode<T>;
@@ -145,7 +153,7 @@ export default class LinkedList<T> {
    * @param {T} element
    * @return {T|null}
    */
-  remove(element: T): T | null {
+  public remove(element: T): T | null {
     const index: number = this.indexOf(element);
     return this.removeByIndex(index);
   }
@@ -154,7 +162,7 @@ export default class LinkedList<T> {
    * @description: 链表的结点数量
    * @return {number}
    */
-  size(): number {
+  public size(): number {
     return this.count;
   }
 
@@ -162,7 +170,7 @@ export default class LinkedList<T> {
    * @description: 链表是否为空
    * @return {boolean}
    */
-  isEmpty(): boolean {
+  public isEmpty(): boolean {
     return this.size() === 0;
   }
 
@@ -170,7 +178,7 @@ export default class LinkedList<T> {
    * @description: 获取头结点
    * @return {TLinkedNode<T>}
    */
-  getHead(): TLinkedNode<T> {
+  public getHead(): TLinkedNode<T> {
     return this.head;
   }
 
@@ -178,7 +186,7 @@ export default class LinkedList<T> {
    * @description: 获取尾结点
    * @return {TLinkedNode}
    */
-  getEnd(): TLinkedNode<T> {
+  public getEnd(): TLinkedNode<T> {
     let current = this.head;
 
     while (current && current.next !== null) {
@@ -192,7 +200,7 @@ export default class LinkedList<T> {
    * @description: 清空当前链表
    * @return {void}
    */
-  clear(): void {
+  public clear(): void {
     this.count = 0;
     this.head = null;
   }
@@ -201,7 +209,7 @@ export default class LinkedList<T> {
    * @description: 把所有结点转成字符串
    * @return {string}
    */
-  toString(): string {
+  public toString(): string {
     if (!this.getHead()) return '';
 
     let current: TLinkedNode<T> = this.head;

@@ -2,7 +2,7 @@
  * @description: Queue
  * 模拟的是 Java 的实现
  * @param {T}
- * @return {*}
+ * @return {Queue}
  */
 export default class Queue<T> {
   private queueList: T[] = [];
@@ -28,7 +28,7 @@ export default class Queue<T> {
    * @description: 获取队列的长度
    * @return {number}
    */
-  size(): number {
+  public size(): number {
     return this.queueList.length;
   }
 
@@ -38,7 +38,7 @@ export default class Queue<T> {
    * @param {T} value
    * @return {void}
    */
-  add(value: T): void {
+  public add(value: T): void {
     if (this.isOverflow()) {
       throw new Error('The Queue is overflow!');
     }
@@ -50,7 +50,7 @@ export default class Queue<T> {
    * 如果遇到问题就抛出异常
    * @return {T}
    */
-  remove(): T {
+  public remove(): T {
     if (this.isEmpty()) {
       throw new Error('The Queue is empty!');
     }
@@ -62,7 +62,7 @@ export default class Queue<T> {
    * 如果遇到问题就抛出异常
    * @return {T}
    */
-  element(): T {
+  public element(): T {
     if (this.isEmpty()) {
       throw new Error('The Queue is empty!');
     }
@@ -77,7 +77,7 @@ export default class Queue<T> {
    * @param {T} value
    * @return {boolean}
    */
-  offer(value: T): boolean {
+  public offer(value: T): boolean {
     if (this.isOverflow()) {
       return false;
     }
@@ -90,7 +90,7 @@ export default class Queue<T> {
    * 如果遇到问题就返回 false
    * @return {T|boolean}
    */
-  poll(): T | boolean {
+  public poll(): T | boolean {
     if (this.isEmpty()) {
       return false;
     }
@@ -102,7 +102,7 @@ export default class Queue<T> {
    * 如果遇到问题就返回 false
    * @return {T|boolean}
    */
-  peek(): T | boolean {
+  public peek(): T | boolean {
     if (this.isEmpty()) {
       return false;
     }

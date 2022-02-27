@@ -74,7 +74,7 @@ export default class BasicHashTable<T extends IHashObject> {
     let numberedHashKey = 0;
     for (const str of hashKey) {
       // chartCodeAt 支持传入索引作为参数，如果不传，那么默认取第一个，也就是它的值为 0
-      numberedHashKey += str.charCodeAt();
+      numberedHashKey += str.charCodeAt(0);
     }
     // 这里取模的方式在 size 较小的时候就会比较容易重复，容易引发散列冲突；
     // 而散列函数的核心就是不同的值不能输出相同的，但通常不会使用 size 特别小的散列表

@@ -12,6 +12,7 @@ const linked = new LinkedList();
 linked.add(3);
 linked.add(7);
 linked.add(11);
+console.log('Before adding', linked, linked.size());
 linked.add(13);
 linked.add(4);
 linked.add(6);
@@ -22,7 +23,7 @@ console.log('Head node is', linked.getHead());
 console.log('Removing node at', linked.removeByIndex(5));
 console.log('Now index 5 is', linked.getLinkedNodeByIndex(5));
 console.log('End node is', linked.getEnd());
-console.log('Stringified linkedlist', linked.toString());
+console.log('Stringified linkedlist', linked.toString()); // 3 -> 5 -> 7 -> 11 -> 13 -> 6
 console.log('IndexOf 4', linked.indexOf(4)); // -1
 console.log('IndexOf 3', linked.indexOf(11)); // 3
 linked.clear();
