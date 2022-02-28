@@ -3,7 +3,7 @@
 ## Usage
 
 ```typescript
-import Queue from './Queue;
+import Queue, { MyQueue } from './Queue;
 
 const queue = new Queue();
 console.log(queue.add(2)); // undefined
@@ -21,4 +21,15 @@ console.log(queue.peek()); // 6
 console.log(queue); // [6, 8]
 console.log(queue.element()); // 6
 console.log(queue); // 6, 8
+
+const myQueue = new MyQueue();
+myQueue.push(1);
+myQueue.push(3);
+myQueue.push(5);
+console.log(myQueue.push(7)); // undefined
+console.log(myQueue); // MyQueue { inStack: [ 1, 3, 5, 7 ], outStack: [] }
+console.log(myQueue.poll()); // 1
+console.log(myQueue.poll()); // 3
+console.log(myQueue.peek()); // 5
+console.log(myQueue.peek()); // 5
 ```

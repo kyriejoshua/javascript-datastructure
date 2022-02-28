@@ -110,3 +110,69 @@ export default class Queue<T> {
     return firstElement;
   }
 }
+
+/**
+ * @description: 用两个栈来实现最基础的队列
+ * @param {T}
+ * @return {MyQueue}
+ */
+export class MyQueue<T> {
+  private inStack: T[];
+  private outStack: T[];
+
+  constructor() {
+    this.inStack = [];
+    this.outStack = [];
+  }
+
+  /**
+   * @description: 从第一个栈里弹出数据到第二个栈，此时第二个栈再弹出就是队列的顺序
+   * @return {void}
+   */
+  private in2out(): void {
+    while (this.inStack.length) {
+      this.outStack.push(this.inStack.pop());
+    }
+  }
+
+  /**
+   * @description: 往队末推入元素
+   * @param {T} val
+   * @return {void}
+   */
+  public push(val: T): void {
+    this.inStack.push(val);
+  }
+
+  /**
+   * @description: 弹出队首元素
+   * @return {T}
+   */
+  public poll(): T {
+    if (!this.outStack.length) {
+      this.in2out();
+    }
+
+    return this.outStack.pop();
+  }
+
+  /**
+   * @description: 取队首元素
+   * @return {T}
+   */
+  public peek(): T {
+    if (!this.outStack.length) {
+      this.in2out();
+    }
+
+    return this.outStack[this.outStack.length - 1];
+  }
+
+  /**
+   * @description: 队列是否为空
+   * @return {boolean}
+   */
+  public empty(): boolean {
+    return this.inStack.length === 0 && this.outStack.length === 0;
+  }
+}
