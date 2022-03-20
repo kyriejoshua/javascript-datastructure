@@ -4,6 +4,7 @@ import LinkedList from './LinkedList';
 import LinkedNode from './LinkedList/LinkedNode';
 import Queue from './Queue';
 import Stack from './Stack';
+import Trie, { TrieByArray } from './Trie';
 
 export default {
   Stack,
@@ -12,4 +13,6 @@ export default {
   LinkedList,
   LinkedNode,
   Graph,
+  TrieByArray,
+  Trie,
 };
