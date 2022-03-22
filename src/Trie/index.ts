@@ -1,3 +1,5 @@
+import AcTrie, { buildFailurePointer } from './AcTrie';
+import AcTrieByArray from './AcTrieByArray';
 import TrieByArray from './TrieByArray';
 
 export class ITrieNode<T> {
@@ -77,4 +79,4 @@ export default class TrieByObject {
   }
 }
 
-export { TrieByArray };
+export { TrieByArray, AcTrieByArray, AcTrie, buildFailurePointer };
