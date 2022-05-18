@@ -1,8 +1,15 @@
 import LinkedNode, { TLinkedNode } from './LinkedNode';
 
+export { LinkedNode, TLinkedNode };
+
 export default class LinkedList<T> {
   protected count = 0;
   protected head: TLinkedNode<T> = null;
+
+  constructor(node: TLinkedNode<T> = null, count = 0) {
+    this.head = node;
+    this.count = count;
+  }
 
   /**
    * @description: 根据元素内容获取对应的索引
@@ -100,6 +107,25 @@ export default class LinkedList<T> {
   }
 
   /**
+   * @description: 在链表头结部插入元素
+   * @param {T} element
+   * @return {number}
+   */
+  public addByHead(element: T): number {
+    const node: TLinkedNode<T> = new LinkedNode(element);
+
+    // 如果头结点为空则直接设置成头结点
+    if (this.head === null) {
+      this.head = node;
+    } else {
+      node.next = this.head;
+      this.head = node;
+    }
+
+    return ++this.count;
+  }
+
+  /**
    * @description: 插入结点
    * @param {T} element
    * @param {number} index
@@ -146,6 +172,14 @@ export default class LinkedList<T> {
     this.count--;
 
     return (current as LinkedNode<T>).element;
+  }
+
+  /**
+   * @description: 移除链表末尾的元素
+   * @return {T|null}
+   */
+  public removeEnd(): T | null {
+    return this.removeByIndex(this.size() - 1);
   }
 
   /**
