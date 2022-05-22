@@ -1,10 +1,3 @@
-/*
- * @Author: kyriejoshua
- * @Description: TODO
- * @Date: 2022-05-22 20:11:14
- * @LastEditors: kyriejoshua
- * @LastEditTime: 2022-05-22 20:31:34
- */
 export interface ICacheItem {
   key: number;
   value: number;
