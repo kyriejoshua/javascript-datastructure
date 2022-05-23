@@ -6,15 +6,17 @@ export interface ICacheNode {
 }
 
 /**
- * @description: LRU 缓存，使用单链表实现
+ * @description: LRU 缓存，使用单链表结合哈希Map实现
  */
 class LRUCacheByLinkedNode<T extends ICacheNode> {
   private capacity: number; // 标记容量
   private linkedList: LinkedList<T>;
+  private hashMap: Map<ICacheNode['key'], ICacheNode['val']>;
 
   constructor(capacity: number) {
     this.capacity = capacity;
     this.linkedList = new LinkedList<T>();
+    this.hashMap = new Map();
   }
 
   /**
@@ -46,8 +48,10 @@ class LRUCacheByLinkedNode<T extends ICacheNode> {
    * @return {unknown|-1}
    */
   get(key: number | string): unknown | -1 {
+    if (this.hashMap.get(key) === undefined) return -1;
+
     const node = this.find(key);
-    return node ? node.element.val : -1;
+    return node.element.val;
   }
 
   /**
@@ -61,14 +65,18 @@ class LRUCacheByLinkedNode<T extends ICacheNode> {
     // 更新的场景
     if (updatedNode) {
       updatedNode.element.val = value;
+      this.hashMap.set(key, value);
       return;
     }
     // 新增的场景
     this.linkedList.addByHead({ key, val: value } as T);
+    this.hashMap.set(key, value);
 
     if (this.linkedList.size() > this.capacity) {
       // 删除最后一个结点
+      const endNode = this.linkedList.getEnd();
       this.linkedList.removeEnd();
+      this.hashMap.delete(endNode.element.key);
     }
 
     return;

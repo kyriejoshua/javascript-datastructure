@@ -6,8 +6,8 @@ export default class LinkedList<T> {
   protected count = 0;
   protected head: TLinkedNode<T> = null;
 
-  constructor(node: TLinkedNode<T> = null, count = 0) {
-    this.head = node;
+  constructor(head: TLinkedNode<T> = null, count = 0) {
+    this.head = head;
     this.count = count;
   }
 
