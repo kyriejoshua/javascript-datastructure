@@ -240,6 +240,22 @@ export default class LinkedList<T> {
   }
 
   /**
+   * @description: 把单链表的所有元素保存成数组
+   * @return {T[]}
+   */
+  public toArray(): T[] {
+    const arr: T[] = [];
+    let current: TLinkedNode<T> = this.head;
+
+    while (current !== null) {
+      arr.push(current.element);
+      current = current.next;
+    }
+
+    return arr;
+  }
+
+  /**
    * @description: 把所有结点转成字符串
    * @return {string}
    */
