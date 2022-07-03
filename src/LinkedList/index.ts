@@ -1,26 +1,52 @@
 import LinkedNode, { TLinkedNode } from './LinkedNode';
 
-export { LinkedNode, TLinkedNode };
+export interface ICompareFunc<T> {
+  (node: TLinkedNode<T>): boolean;
+}
 
 export default class LinkedList<T> {
   protected count = 0;
   protected head: TLinkedNode<T> = null;
+  protected isStrictEqual = false; // 是否严格相等，用于查找等行为
 
-  constructor(head: TLinkedNode<T> = null, count = 0) {
+  constructor(head: TLinkedNode<T> = null, count = 0, isStrictEqual = false) {
     this.head = head;
     this.count = count;
+    this.isStrictEqual = isStrictEqual;
+  }
+
+  /**
+   * @description: 判断两个节点的内容是否相等
+   * 优先使用外部定义的比较函数，其次内部直接进行元素的比较
+   * @param {TLinkedNode<T>} node
+   * @param {T} element
+   * @param {ICompareFunc<T>} func
+   * @return {boolean}
+   */
+  private isElementEqual(node: TLinkedNode<T>, element: T, func?: ICompareFunc<T>): boolean {
+    // 如果有自定义的比较函数，就直接使用
+    if (func) return func(node);
+
+    // 根据内置的深浅比较类型来判断是否相等
+    const isEqual = this.isStrictEqual
+      ? element === node?.element
+      : JSON.stringify(element) === JSON.stringify(node?.element);
+
+    return isEqual;
   }
 
   /**
    * @description: 根据元素内容获取对应的索引
    * @param {T} element
+   * @param {ICompareFunc<T>} func
    * @return {number}
    */
-  private indexOf(element: T): number {
+  private indexOf(element: T, func?: ICompareFunc<T>): number {
     let current: TLinkedNode<T> = this.head;
     let i = 0;
     while (i < this.count) {
-      if (element === current?.element) return i;
+      if (this.isElementEqual(current, element, func)) return i;
+
       current = (current as LinkedNode<T>).next;
       i++;
     }
@@ -72,12 +98,13 @@ export default class LinkedList<T> {
   /**
    * @description: 根据元素值找到结点
    * @param {T} element
+   * @param {ICompareFunc<T>} func
    * @return {TLinkedNode<T>}
    */
-  public find(element: T): TLinkedNode<T> {
+  public find(element: T, func?: ICompareFunc<T>): TLinkedNode<T> {
     let node: TLinkedNode<T> = this.head;
     while (node !== null) {
-      if (node.element === element) {
+      if (this.isElementEqual(node, element, func)) {
         break;
       }
       node = node.next;
@@ -185,10 +212,11 @@ export default class LinkedList<T> {
   /**
    * @description: 根据结点值移除元素
    * @param {T} element
+   * @param {ICompareFunc<T>} func
    * @return {T|null}
    */
-  public remove(element: T): T | null {
-    const index: number = this.indexOf(element);
+  public remove(element: T, func?: ICompareFunc<T>): T | null {
+    const index: number = this.indexOf(element, func);
     return this.removeByIndex(index);
   }
 
@@ -273,3 +301,7 @@ export default class LinkedList<T> {
     return str;
   }
 }
+
+type TLinkedList = typeof LinkedList;
+
+export { LinkedNode, TLinkedNode, TLinkedList };
