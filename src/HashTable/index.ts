@@ -4,13 +4,17 @@ export interface IHashObject {
   deleted?: boolean; // 保存被删除索引或数组的属性的统计
 }
 
+export interface IHashFunc {
+  (key: string): string | number;
+}
+
 /**
  * @description: 最基础的散列表，不包含装载因子
  */
 export default class BasicHashTable<T extends IHashObject> {
   private basicHashTable: T[] = [];
   private size = 9533; // 10000 以内的最大质数
-  private hash: (key: string) => string | number = this.defaultHash;
+  private hash: IHashFunc = this.defaultHash;
   // private deletedKeys: (number | string)[];
 
   /**
@@ -60,7 +64,7 @@ export default class BasicHashTable<T extends IHashObject> {
   }
 
   /**
-   * @description: 默认取最后两位作为索引
+   * @description: 默认的哈希函数取所有的字符的 ascii 编码值
    * @param {string} key
    * @return {number}
    */
@@ -118,7 +122,7 @@ export default class BasicHashTable<T extends IHashObject> {
    * 如果不传参数，默认按照 undefined 字符串的解析
    * @param {string} key
    * @param {any} val
-   * @return {*}
+   * @return {T[]}
    */
   public put = (key: string, val: unknown): T[] => {
     // 如果当前散列表已满，可以是数组内元素撑满，也可以是属性个数撑满
