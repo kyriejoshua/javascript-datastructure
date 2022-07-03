@@ -17,10 +17,10 @@ console.log(basicHashTable);
 basicHashTable.put('10', 10);
 console.log(basicHashTable);
 // 读取
-console.log('current 10 val', basicHashTable.get('10'));
-console.log('current 04 val', basicHashTable.get('04'));
+console.log('current 10 val', basicHashTable.get('10')); // 10
+console.log('current 04 val', basicHashTable.get('04')); // 41
 console.log(basicHashTable);
 // 散列表满的状态下插入，会抛出异常
-basicHashTable.put('03', 30);
+basicHashTable.put('03', 30); // Error: This HashMap is totally full!
 console.log(basicHashTable);
 ```
