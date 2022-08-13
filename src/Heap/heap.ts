@@ -1,3 +1,7 @@
+/**
+ * @description: 注意这里的堆的起始位置是从索引 1 开始的
+ * @return {Heap}
+ */
 export default class Heap {
   private arr: number[]; // 使用数组表示堆
   private max: number; // 堆可以存储的最大数量
@@ -21,19 +25,58 @@ export default class Heap {
    * @param {number} j
    * @return {void}
    */
-  private swap(arr: number[], i: number, j: number): void {
+  static swap(arr: number[], i: number, j: number): void {
     [arr[j], arr[i]] = [arr[i], arr[j]];
   }
 
   /**
-   * @description: 堆化
-   * 按照大顶堆的方式堆化
+   * @description: 自下而上的堆化
+   * 以生成小顶堆为例
+   * @param {number[]} arr
+   * @param {number} i
+   * @return {number[]}
+   */
+  static heapifyFromDown(arr: number[], i: number): number[] {
+    let index = Math.floor(i / 2);
+    while (index > 0 && arr[index] > arr[i]) {
+      Heap.swap(arr, i, index);
+      index = Math.floor(index / 2);
+    }
+    return arr;
+  }
+
+  /**
+   * @description: 自上而下的堆化
+   * 以生成小顶堆为例
    * @param {number[]} arr
    * @param {number} heapSize
    * @param {number} i
    * @return {void}
    */
-  private heapify(arr: number[], heapSize: number, i: number): void {
+  static heapifyFromUp(arr: number[], heapSize: number, i: number): void {
+    let minIndex = i;
+
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      if (2 * i <= heapSize && arr[minIndex] > arr[2 * i]) minIndex = 2 * i;
+      if (2 * i + 1 <= heapSize && arr[minIndex] > arr[2 * i + 1]) minIndex = 2 * i + 1;
+      if (minIndex === i) break;
+      // 保存较小值的索引，分别与左右子节点比较
+      Heap.swap(arr, i, minIndex);
+      // 更新索引值，继续遍历
+      i = minIndex;
+    }
+  }
+
+  /**
+   * @description: 堆化
+   * 按照大顶堆的方式自上而下堆化
+   * @param {number[]} arr
+   * @param {number} heapSize
+   * @param {number} i
+   * @return {void}
+   */
+  static heapify(arr: number[], heapSize: number, i: number): void {
     let maxIndex = i;
 
     // eslint-disable-next-line no-constant-condition
@@ -42,9 +85,68 @@ export default class Heap {
       if (2 * i <= heapSize && arr[maxIndex] < arr[2 * i]) maxIndex = 2 * i;
       if (2 * i + 1 <= heapSize && arr[maxIndex] < arr[2 * i + 1]) maxIndex = 2 * i + 1;
       if (maxIndex === i) break;
-      this.swap(arr, i, maxIndex);
+      Heap.swap(arr, i, maxIndex);
       i = maxIndex;
     }
+  }
+
+  /**
+   * @description: 从后往前构建大顶堆
+   * @param {number[]} arr
+   * @param {number} heapSize
+   * @return {number[]}
+   */
+  static buildMaxHeap(arr: number[], heapSize: number): number[] {
+    for (let i = Math.floor(heapSize / 2); i > 0; i--) {
+      Heap.heapify(arr, heapSize, i);
+    }
+
+    return arr;
+  }
+
+  /**
+   * @description: 从前往后构建小顶堆
+   * @param {number[]} arr
+   * @param {number} i
+   * @return {number[]}
+   */
+  static buildMinHeap(arr: number[], i: number): number[] {
+    while (i < arr.length - 1) {
+      i++;
+      Heap.heapifyFromDown(arr, i);
+    }
+    return arr;
+  }
+
+  /**
+   * @description: 堆排序
+   * 构建大顶堆
+   * 交换最大值的元素到末位
+   * 堆化直至数组有序
+   * 这里默认索引从 1 开始，也可以改为从 0 开始，相应的，堆化的地方也要处理成 0
+   * @param {number[]} arr
+   * @return {number[]}
+   */
+  static heapSort(arr: number[]): number[] {
+    // 数组的最后的元素的索引
+    const lastHeapIndex = arr.length - 1;
+
+    // 构建大顶堆
+    Heap.buildMaxHeap(arr, lastHeapIndex);
+
+    // !从后往前比较，把当前遍历的节点值交换到根节点,把根节点（也就是最大值）放到当前树（子树）的末尾
+    for (let i = lastHeapIndex; i > 1; i--) {
+      // 交换最大值到末尾
+      Heap.swap(arr, 1, i);
+      // !减小堆的长度，相当于剔除已经排好序的最大值，开始堆化当前最大值之外的最大值，索引就是 i - 1
+      // 对根节点进行自上而下的堆化，重新排出最大值到根节点
+      Heap.heapify(arr, i - 1, 1);
+      // 其实也可以用 heapSize， 可能会比较好理解，效果是等价的
+      // lastHeapIndex--;
+      // Heap.heapify(arr, lastHeapIndex, 1);
+    }
+
+    return arr;
   }
 
   /**
@@ -62,7 +164,7 @@ export default class Heap {
     // 索引从后往前
     while (Math.floor(i / 2) > 0 && this.arr[i] > this.arr[Math.floor(i / 2)]) {
       // 交换位置
-      this.swap(this.arr, i, Math.floor(i / 2));
+      Heap.swap(this.arr, i, Math.floor(i / 2));
       i /= 2;
       i = Math.floor(i);
     }
@@ -84,7 +186,7 @@ export default class Heap {
     // 剔除最后一个节点
     this.count--;
     // 自上往下堆化
-    this.heapify(this.arr, this.count, 1);
+    Heap.heapify(this.arr, this.count, 1);
     return maxNum;
   }
 }
