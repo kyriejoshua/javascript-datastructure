@@ -58,8 +58,12 @@ export default class Heap {
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      if (2 * i <= heapSize && arr[minIndex] > arr[2 * i]) minIndex = 2 * i;
-      if (2 * i + 1 <= heapSize && arr[minIndex] > arr[2 * i + 1]) minIndex = 2 * i + 1;
+      const leftChildNode = 2 * i;
+      const rightChildNode = 2 * i + 1;
+
+      if (leftChildNode <= heapSize && arr[minIndex] > arr[leftChildNode]) minIndex = leftChildNode;
+      if (rightChildNode <= heapSize && arr[minIndex] > arr[rightChildNode]) minIndex = rightChildNode;
+
       if (minIndex === i) break;
       // 保存较小值的索引，分别与左右子节点比较
       Heap.swap(arr, i, minIndex);
@@ -82,8 +86,12 @@ export default class Heap {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       // 保存较大值的索引，分别与左右子节点比较
-      if (2 * i <= heapSize && arr[maxIndex] < arr[2 * i]) maxIndex = 2 * i;
-      if (2 * i + 1 <= heapSize && arr[maxIndex] < arr[2 * i + 1]) maxIndex = 2 * i + 1;
+      const leftChildNode = 2 * i;
+      const rightChildNode = 2 * i + 1;
+
+      if (leftChildNode <= heapSize && arr[maxIndex] < arr[leftChildNode]) maxIndex = leftChildNode;
+      if (rightChildNode <= heapSize && arr[maxIndex] < arr[rightChildNode]) maxIndex = rightChildNode;
+
       if (maxIndex === i) break;
       Heap.swap(arr, i, maxIndex);
       i = maxIndex;
@@ -125,28 +133,36 @@ export default class Heap {
    * 堆化直至数组有序
    * 这里默认索引从 1 开始，也可以改为从 0 开始，相应的，堆化的地方也要处理成 0
    * @param {number[]} arr
+   * @return {boolean} sortInplace 默认是原地排序
    * @return {number[]}
    */
-  static heapSort(arr: number[]): number[] {
+  static heapSort(arr: number[], sortInplace = true): number[] {
+    const [firstElement] = arr;
+    const res: number[] = sortInplace ? arr : [...arr];
+    // 手动插入第一个元素
+    if (firstElement !== null && firstElement !== undefined) {
+      res.unshift(null);
+    }
+
     // 数组的最后的元素的索引
-    const lastHeapIndex = arr.length - 1;
+    const lastHeapIndex = res.length - 1;
 
     // 构建大顶堆
-    Heap.buildMaxHeap(arr, lastHeapIndex);
+    Heap.buildMaxHeap(res, lastHeapIndex);
 
     // !从后往前比较，把当前遍历的节点值交换到根节点,把根节点（也就是最大值）放到当前树（子树）的末尾
     for (let i = lastHeapIndex; i > 1; i--) {
       // 交换最大值到末尾
-      Heap.swap(arr, 1, i);
+      Heap.swap(res, 1, i);
       // !减小堆的长度，相当于剔除已经排好序的最大值，开始堆化当前最大值之外的最大值，索引就是 i - 1
       // 对根节点进行自上而下的堆化，重新排出最大值到根节点
-      Heap.heapify(arr, i - 1, 1);
+      Heap.heapify(res, i - 1, 1);
       // 其实也可以用 heapSize， 可能会比较好理解，效果是等价的
       // lastHeapIndex--;
-      // Heap.heapify(arr, lastHeapIndex, 1);
+      // Heap.heapify(res, lastHeapIndex, 1);
     }
 
-    return arr;
+    return res.slice(1);
   }
 
   /**
