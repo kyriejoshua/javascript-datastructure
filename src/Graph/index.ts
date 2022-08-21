@@ -30,17 +30,23 @@ export default class Graph {
 
   /**
    * @description: 广度优先搜索
-   * @param {number} s
-   * @param {numebr} t
+   * @param {number} s 起始顶点
+   * @param {numebr} t 目标顶点
    * @return {void}
    */
   public bfs(s: number, t: number): void {
     if (s === t) return;
+
+    // 存储是否已经访问过
     const visited: boolean[] = new Array(this.v);
+    // 层序遍历，需要维护队列；链表形式的队列
     const queue = new LinkedList();
+    // 记录搜索路径
     const prev: number[] = new Array(this.v).fill(-1);
+
     visited[s] = true;
     queue.add(s);
+
     while (queue.size()) {
       const w = queue.removeByIndex(0) as number;
       for (let i = 0; i < this.adj[w].size(); i++) {
@@ -59,6 +65,7 @@ export default class Graph {
 
   /**
    * @description: 深度优先搜索
+   * 回溯思想的应用
    * @param {number} s
    * @param {number} t
    * @return {void}
@@ -88,15 +95,18 @@ export default class Graph {
 
   /**
    * @description: 递归遍历逻辑
-   * @param {number} w
-   * @param {number} t
-   * @param {boolean[]} visited
-   * @param {number[]} prev
-   * @param {boolean} found
+   * @param {number} w 当前开始查找的起始顶点
+   * @param {number} t 目标顶点
+   * @param {boolean[]} visited 顶点访问状态
+   * @param {number[]} prev 搜索路径记录
+   * @param {boolean} found 标记是否已经找到
    * @return {void}
    */
   private recuriveDfs(w: number, t: number, visited: boolean[], prev: number[], found = false): void {
+    // 如果已经找到终止的顶点
     if (found) return;
+
+    // 标记为已访问过
     visited[w] = true;
     if (w === t) {
       found = true;
